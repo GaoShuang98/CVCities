@@ -70,8 +70,8 @@ To download this dataset, you can click: _🚧 coming soon..._
 <td style="text-align: center" colspan="2">Occlusion</td>
 </tr>
 <tr>
-<td style="text-align: center"><img src="/figures/figure9-2-1.jpg" width="150"></td>
-<td style="text-align: center"><img src="/figures/figure9-2-2.jpg" width="75"></td>
+<td style="text-align: center"><img src="/figures/figure9-2-1.jpg" alt="ground image" width="150"></td>
+<td style="text-align: center"><img src="/figures/figure9-2-2.jpg" alt="satellite image" width="75"></td>
 <td style="text-align: center" rowspan="2" colspan="2">Other scenes...</td>
 </tr>
 <tr>
