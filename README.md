@@ -18,18 +18,17 @@ To download this dataset, you can click: _🚧 coming soon..._
 ### City distribution
 ![ALT TEXT](/figures/method.png)
 
-###  Sample points distribution
+### Sample points distribution
 ![ALT TEXT](/figures/method.png)
 
-### The yearly and monhly distribution of images
+### Yearly and monhly distribution
 ![ALT TEXT](/figures/method.png)
 
-## Method
-Our framework is based on the vision foundational model DINOv2 and the feature mix module.
+## Framework
 ![ALT TEXT](/figures/method.png)
 
 ## Precision distribution
-![ALT TEXT](/figures/method.png)
+_ 🚧 Under Construction 🛠️_
 
 ## Model Zoo
 _ 🚧 Under Construction 🛠️_
