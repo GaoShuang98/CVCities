@@ -17,7 +17,7 @@ To download this dataset, you can click: _🚧 coming soon..._
 
 ### City distribution
 
-<td style="text-align: center"><img src="/figures/distribution_map_of_cities.png" alt="Capetown" width="500"></td>
+<td style="text-align: center"><img src="/figures/distribution_map_of_cities.png" alt="City distribution" width="500"></td>
 
 ### Sample points distribution, 8 of 16 cities
 <table style="text-align: center">
@@ -80,12 +80,12 @@ To download this dataset, you can click: _🚧 coming soon..._
 </table>
 
 
-### Yearly and monhly distribution
-<td style="text-align: center"><img src="/figures/figure3a.png" alt="Capetown" width="200"></td>
-<td style="text-align: center"><img src="/figures/figure3b.png" alt="London" width="200"></td>
+### Yearly and monthly distribution
+<td style="text-align: center"><img src="/figures/figure3a.png" alt="Yearly distribution" width="200"></td>
+<td style="text-align: center"><img src="/figures/figure3b.png" alt="monthly distribution" width="200"></td>
 
 ## Framework
-<td style="text-align: center"><img src="/figures/figure4.png" alt="Capetown" width="400"></td>
+<td style="text-align: center"><img src="/figures/figure4.png" alt="Framework" width="400"></td>
 
 ## Precision distribution
 _🚧 Under Construction 🛠️_
