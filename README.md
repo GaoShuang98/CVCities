@@ -2,7 +2,8 @@
 
 # 🌏🚶‍♂️🔍CV-Cities: Cross-view Image Geo-localization in Global Urban Area
 
-Paper: _🚧 coming soon..._
+Paper: Under review 
+ArXiv: _🚧 coming soon..._
 
 </div>
 
