@@ -48,7 +48,7 @@ To download this dataset, you can click: _🚧 coming soon..._
 </tr>
 </table>
 
-### Images of different scenes
+### Different scenes
 <table>
 <tr>
 <td style="text-align: center"><img src="/figures/figure2-1-1.jpg" alt="ground image" width="150"></td>
