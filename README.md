@@ -43,7 +43,7 @@ To download this dataset, you can click: _🚧 coming soon..._
 <tr>
 <td style="text-align: center">New York, USA</td>
 <td style="text-align: center">Paris, France</td>
-<td style="text-align: center">Rio de Janeiro</td>
+<td style="text-align: center">Rio, Brazil</td>
 <td style="text-align: center">Taipei, China</td>
 </tr>
 </table>
