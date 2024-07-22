@@ -14,7 +14,7 @@ To improve the cross-view geo-localization performance of the framework on a glo
 
 ## Global Cross-view Image Geo-localization Dataset, CV-Cities
 We collected 223,736 ground images and 223,736 satellite images with high-precision GPS coordinates of 16 typical cities in five continents. 
-To download this dataset, you can click: _🚧 coming soon..._
+To download this dataset, you can click: [CV-Cities](https://huggingface.co/datasets/gaoshuang98/CV-Cities).
 
 ### City distribution
 
