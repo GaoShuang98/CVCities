@@ -82,8 +82,12 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 
 
 ### Yearly and monthly distribution
+<table>
+<tr>
 <td style="text-align: center"><img src="/figures/figure3a.png" alt="Yearly distribution" width="200"></td>
 <td style="text-align: center"><img src="/figures/figure3b.png" alt="monthly distribution" width="200"></td>
+</tr>
+</table>
 
 ## Framework
 <td style="text-align: center"><img src="/figures/figure4.png" alt="Framework" width="500"></td>
