@@ -14,7 +14,7 @@ To improve the cross-view geo-localization performance of the framework on a glo
 
 ## Global Cross-view Image Geo-localization Dataset, CV-Cities
 We collected 223,736 ground images and 223,736 satellite images with high-precision GPS coordinates of 16 typical cities in five continents. 
-To download this dataset, you can click: _🚧 coming soon..._
+To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/datasets/gaoshuang98/CV-Cities) or [🤗CV-Cities (mirror)](https://hf-mirror.com/datasets/gaoshuang98/CV-Cities/tree/main).
 
 ### City distribution
 
@@ -43,8 +43,8 @@ To download this dataset, you can click: _🚧 coming soon..._
 <tr>
 <td style="text-align: center">New York, USA</td>
 <td style="text-align: center">Paris, France</td>
-<td style="text-align: center">Rio de Janeiro</td>
-<td style="text-align: center">Taipei, Taiwan</td>
+<td style="text-align: center">Rio, Brazil</td>
+<td style="text-align: center">Taipei, China</td>
 </tr>
 </table>
 
@@ -82,8 +82,12 @@ To download this dataset, you can click: _🚧 coming soon..._
 
 
 ### Yearly and monthly distribution
+<table>
+<tr>
 <td style="text-align: center"><img src="/figures/figure3a.png" alt="Yearly distribution" width="200"></td>
 <td style="text-align: center"><img src="/figures/figure3b.png" alt="monthly distribution" width="200"></td>
+</tr>
+</table>
 
 ## Framework
 <td style="text-align: center"><img src="/figures/figure4.png" alt="Framework" width="500"></td>
