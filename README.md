@@ -4,7 +4,7 @@
 
 Paper: Under review  
 ArXiv: _🚧 coming soon..._
-
+    
 </div>
 
 ## Description
@@ -122,7 +122,7 @@ _🚧 Under Construction 🛠️_
 
 ### Train the CVCities
 ```python
-# _🚧 Under Construction 🛠️_
+🚧 Under Construction 🛠
 ```
 
 ## Acknowledgments
