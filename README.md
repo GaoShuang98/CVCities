@@ -2,7 +2,7 @@
 
 # 🌏🚶‍♂️🔍CV-Cities: Cross-view Image Geo-localization in Global Urban Area
 
-Paper: Under review 
+Paper: Under review  
 ArXiv: _🚧 coming soon..._
 
 </div>
@@ -93,14 +93,36 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 <td style="text-align: center"><img src="/figures/figure4.png" alt="Framework" width="500"></td>
 
 ## Precision distribution
-_🚧 Under Construction 🛠️_
+<table style="text-align: center">
+<tr>
+<td style="text-align: center"><img src="/figures/precision_london100.jpg" alt="London" width="150"></td>
+<td style="text-align: center"><img src="/figures/precision_rio100.jpg" alt="Rio" width="150"></td>
+<td style="text-align: center"><img src="/figures/precision_seattle100.jpg" alt="seattle" width="150"></td>
+</tr>
+<tr>
+<td style="text-align: center">London, UK</td>
+<td style="text-align: center">Rio, Brazil</td>
+<td style="text-align: center">Seattle, USA</td>
+
+</tr>
+<tr>
+<td style="text-align: center"><img src="/figures/precision_sinapore100.jpg" alt="Singapore" width="150"></td>
+<td style="text-align: center"><img src="/figures/precision_sydney100.jpg" alt="sydney" width="150"></td>
+<td style="text-align: center"><img src="/figures/precision_taipei100.jpg" alt="taipei" width="150"></td>
+</tr>
+<tr>
+<td style="text-align: center">Singapore</td>
+<td style="text-align: center">Sydney, Australia</td>
+<td style="text-align: center">Taipei, China</td>
+</tr>
+</table>
 
 ## Model Zoo
 _🚧 Under Construction 🛠️_
 
-### Usage: Trained model
+### Train the CVCities
 ```python
-# 🚧 Under Construction 🛠
+# _🚧 Under Construction 🛠️_
 ```
 
 ## Acknowledgments
