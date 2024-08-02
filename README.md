@@ -1,6 +1,6 @@
 <div style="text-align: center">
 
-# 🌏🚶‍♂️🔍CV-Cities: Cross-view Image Geo-localization in Global Urban Area
+# 🌏🚶‍♂️🔍CV-Cities: Advancing Cross-view Image Geo-localization in Global Cities
 
 [//]: # (Paper: Under review  )
 ArXiv: _🚧 coming soon..._
