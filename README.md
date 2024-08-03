@@ -12,7 +12,7 @@ ArXiv: _🚧 coming soon..._
 Cross-view image geo-localization is beset with numerous difficulties and challenges, mainly due to the significant discrepancies in viewpoint, the intricacy of localization scenarios, and global localization needs. Given these challenges, we present a novel cross-view image geo-localization framework. The experimental results demonstrate that the proposed framework outperforms existing methods on multiple public datasets and self-built datasets. 
 To improve the cross-view geo-localization performance of the framework on a global scale, we have built a novel global cross-view geo-localization dataset, CV-Cities. This dataset encompassing a diverse range of intricate scenarios. It serves as a challenging benchmark for cross-view geo-localization.
 
-## Global Cross-view Image Geo-localization Dataset, CV-Cities
+## CV-Cities: Global Cross-view Image Geo-localization Dataset
 We collected 223,736 ground images and 223,736 satellite images with high-precision GPS coordinates of 16 typical cities in five continents. 
 To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/datasets/gaoshuang98/CV-Cities) or [🤗CV-Cities (mirror)](https://hf-mirror.com/datasets/gaoshuang98/CV-Cities/tree/main).
 
