@@ -1,6 +1,6 @@
 <div style="text-align: center">
 
-# 🌏🚶‍♂️🔍CV-Cities: Advancing Cross-view Image Geo-localization in Global Cities
+# 🌏🚶‍♂️🔍CV-Cities: Advancing Cross-View Image Geo-Localization in Global Cities
 
 [//]: # (Paper: Under review  )
 ArXiv: _🚧 coming soon..._
@@ -122,7 +122,7 @@ _🚧 Under Construction 🛠️_
 
 ### Train the CVCities
 ```python
-🚧 Under Construction 🛠
+python train/train_cvcities.py
 ```
 
 ## Acknowledgments
