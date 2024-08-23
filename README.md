@@ -129,6 +129,7 @@ python train/train_cvcities.py
 This code is based on the amazing work of:
  - [DINOv2](https://github.com/facebookresearch/dinov2)
  - [Sample4Geo](https://github.com/Skyy93/Sample4Geo)
+ - [QGIS](https://github.com/qgis/QGIS)
 
 ## Citation
 _🚧 Under Construction 🛠_
