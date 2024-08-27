@@ -33,7 +33,7 @@ def get_transforms_train(image_size_sat,
     
     
     satellite_transforms = A.Compose([
-                                      A.CenterCrop(height=378, width=378, p=1),
+
                                       A.ImageCompression(quality_lower=90, quality_upper=100, p=0.5),
                                       A.Resize(image_size_sat[0], image_size_sat[1], interpolation=cv2.INTER_LINEAR_EXACT, p=1.0),
                                       A.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.15, hue=0.15, always_apply=False, p=0.5),
@@ -89,7 +89,6 @@ def get_transforms_val(image_size_sat,
                        ground_cutting=0):
     
     satellite_transforms = A.Compose([
-                                      A.CenterCrop(height=378, width=378, p=1),
                                       A.Resize(image_size_sat[0], image_size_sat[1], interpolation=cv2.INTER_LINEAR_EXACT, p=1.0),
                                       A.Normalize(mean, std),
                                       ToTensorV2(),

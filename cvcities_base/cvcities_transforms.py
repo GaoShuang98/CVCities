@@ -43,7 +43,7 @@ def get_transforms_train(image_size_sat,
                                       # A.RandomResizedCrop(height=image_size_sat[0], width=image_size_sat[1],
                                       #                       scale=(crop_size_ratio_min, crop_size_ratio_max), ratio=(1., 1.),
                                       #                       interpolation=cv2.INTER_LINEAR_EXACT, p=crop_p),
-                                      A.CenterCrop(height=image_size_sat[0], width=image_size_sat[1], p=crop_p),
+                                      A.CenterCrop(height=378, width=378, p=1),
                                       A.Resize(image_size_sat[0], image_size_sat[1], interpolation=cv2.INTER_LINEAR_EXACT, p=1.0),
                                       A.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.15, hue=0.15, always_apply=False, p=0.5),
                                       A.OneOf([
@@ -99,7 +99,7 @@ def get_transforms_val(image_size_sat,
                        ground_cutting=0):
 
     satellite_transforms = A.Compose([
-                                      # A.CenterCrop(height=image_size_sat[0], width=image_size_sat[1], p=1),  # 新增
+                                      A.CenterCrop(height=378, width=378, p=1),
                                       A.Resize(image_size_sat[0], image_size_sat[1], interpolation=cv2.INTER_LINEAR_EXACT, p=1.0),
                                       A.Normalize(mean, std),
                                       ToTensorV2(),
