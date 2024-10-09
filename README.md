@@ -7,20 +7,20 @@ ArXiv: _🚧 coming soon..._
     
 </div>
 
-## Description
+## Description 📜
 
 Cross-view geo-localization（CVGL） is beset with numerous difficulties and challenges, mainly due to the significant discrepancies in viewpoint, the intricacy of localization scenarios, and global localization needs. Given these challenges, we present a novel cross-view image geo-localization framework. The experimental results demonstrate that the proposed framework outperforms existing methods on multiple public datasets and self-built datasets. 
 To improve the cross-view geo-localization performance of the framework on a global scale, we have built a novel global cross-view geo-localization dataset, CV-Cities. This dataset encompassing a diverse range of intricate scenarios. It serves as a challenging benchmark for cross-view geo-localization.
 
-## CV-Cities: Global Cross-view Geo-localization Dataset
+## CV-Cities: Global Cross-view Geo-localization Dataset 💾
 We collected 223,736 ground images and 223,736 satellite images with high-precision GPS coordinates of 16 typical cities in five continents. 
 To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/datasets/gaoshuang98/CV-Cities) or [🤗CV-Cities (mirror)](https://hf-mirror.com/datasets/gaoshuang98/CV-Cities/tree/main).
 
-### City distribution
+### City distribution 📊
 
 <td style="text-align: center"><img src="/figures/distribution_map_of_cities.png" alt="City distribution" width="600"></td>
 
-### Sample points distribution, 8 of 16 cities
+### Sample points distribution, 8 of 16 cities 📍
 <table style="text-align: center">
 <tr>
 <td style="text-align: center"><img src="/figures/capetown.png" alt="Capetown" width="100"></td>
@@ -48,7 +48,7 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 </tr>
 </table>
 
-### Different scenes
+### Different scenes 🏞️
 <table>
 <tr>
 <td style="text-align: center"><img src="/figures/figure2-1-1.jpg" alt="ground image" width="150"></td>
@@ -81,7 +81,7 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 </table>
 
 
-### Yearly and monthly distribution
+### Yearly and monthly distribution 📊
 <table>
 <tr>
 <td style="text-align: center"><img src="/figures/figure3a.png" alt="Yearly distribution" width="200"></td>
@@ -89,10 +89,10 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 </tr>
 </table>
 
-## Framework
+## Framework 🖇️
 <td style="text-align: center"><img src="/figures/figure4.png" alt="Framework" width="500"></td>
 
-## Precision distribution
+## Precision distribution 🚿
 <table style="text-align: center">
 <tr>
 <td style="text-align: center"><img src="/figures/precision_london100.jpg" alt="London" width="150"></td>
@@ -117,20 +117,20 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 </tr>
 </table>
 
-## Model Zoo
+## Model Zoo 📦
 _🚧 Under Construction 🛠️_
 
-### Train the CVCities
+### Train the CVCities 🚂
 ```python
 python train/train_cvcities.py
 ```
 
-## Acknowledgments
+## Acknowledgments 🧭
 This code is based on the amazing work of:
  - [DINOv2](https://github.com/facebookresearch/dinov2)
  - [Sample4Geo](https://github.com/Skyy93/Sample4Geo)
  - [QGIS](https://github.com/qgis/QGIS)
 
-## Citation
+## Citation ✅
 _🚧 Under Construction 🛠_
 
