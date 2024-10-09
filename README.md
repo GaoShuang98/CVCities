@@ -27,6 +27,7 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 <td style="text-align: center"><img src="/figures/london-month.png" alt="London" width="100"></td>
 <td style="text-align: center"><img src="/figures/melbourne-month.png" alt="Melbourne" width="100"></td>
 <td style="text-align: center"><img src="/figures/mexico-month.png" alt="mexico" width="100"></td>
+<td rowspan="8"><img src="/figures/monthly-scalebar.png" alt="scalebar" width="40"> <br>Scalebar</td>
 </tr>
 <tr>
 <td style="text-align: center">Capetown, South Africa</td>
