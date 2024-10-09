@@ -110,7 +110,7 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 ### Scenes, yearly and monthly distribution 📊
 <table>
 <tr>
-<td style="text-align: center"><img src="/figures/figure3a.png" alt="Yearly distribution" width="200"></td>
+<td style="text-align: center"><img src="/figures/figure3a.png" alt="Scenes distribution" width="200"></td>
 <td style="text-align: center"><img src="/figures/figure3b.png" alt="Yearly distribution" width="200"></td>
 <td style="text-align: center"><img src="/figures/figure3c.png" alt="monthly distribution" width="200"></td>
 </tr>
