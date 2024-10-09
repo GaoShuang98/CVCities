@@ -20,13 +20,13 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 
 <td style="text-align: center"><img src="/figures/distribution_map_of_cities.png" alt="City distribution" width="600"></td>
 
-### Sample points distribution, 8 of 16 cities 📍
+### Sample points and monthly distribution of 16 cities 📍
 <table style="text-align: center">
 <tr>
-<td style="text-align: center"><img src="/figures/capetown.png" alt="Capetown" width="100"></td>
-<td style="text-align: center"><img src="/figures/london.png" alt="London" width="100"></td>
-<td style="text-align: center"><img src="/figures/melbourne.png" alt="Melbourne" width="100"></td>
-<td style="text-align: center"><img src="/figures/mexico.png" alt="mexico" width="100"></td>
+<td style="text-align: center"><img src="/figures/captown-month.png" alt="Capetown" width="100"></td>
+<td style="text-align: center"><img src="/figures/london-month.png" alt="London" width="100"></td>
+<td style="text-align: center"><img src="/figures/melbourne-month.png" alt="Melbourne" width="100"></td>
+<td style="text-align: center"><img src="/figures/mexico-month.png" alt="mexico" width="100"></td>
 </tr>
 <tr>
 <td style="text-align: center">Capetown, South Africa</td>
@@ -35,16 +35,40 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 <td style="text-align: center">Mexico city, Mexico</td>
 </tr>
 <tr>
-<td style="text-align: center"><img src="/figures/newyork.png" alt="newyork" width="100"></td>
-<td style="text-align: center"><img src="/figures/paris.png" alt="paris" width="100"></td>
-<td style="text-align: center"><img src="/figures/rio.png" alt="rio" width="100"></td>
-<td style="text-align: center"><img src="/figures/taipei.png" alt="Taipei" width="100"></td>
+<td style="text-align: center"><img src="/figures/newyork-month.png" alt="newyork" width="100"></td>
+<td style="text-align: center"><img src="/figures/paris-month.png" alt="paris" width="100"></td>
+<td style="text-align: center"><img src="/figures/rio-month.png" alt="rio" width="100"></td>
+<td style="text-align: center"><img src="/figures/taipei-month.png" alt="Taipei" width="100"></td>
 </tr>
 <tr>
 <td style="text-align: center">New York, USA</td>
 <td style="text-align: center">Paris, France</td>
 <td style="text-align: center">Rio, Brazil</td>
 <td style="text-align: center">Taipei, China</td>
+</tr>
+<tr>
+<td style="text-align: center"><img src="/figures/losangeles-month.png" alt="Losangeles" width="100"></td>
+<td style="text-align: center"><img src="/figures/maynila-month.png" alt="Maynila" width="100"></td>
+<td style="text-align: center"><img src="/figures/santiago-month.png" alt="Santiago" width="100"></td>
+<td style="text-align: center"><img src="/figures/sydney-month.png" alt="Sydney" width="100"></td>
+</tr>
+<tr>
+<td style="text-align: center">Losangeles, USA</td>
+<td style="text-align: center">Manila, Philipine</td>
+<td style="text-align: center">Santiago, Chile</td>
+<td style="text-align: center">Sydney, Australia</td>
+</tr>
+<tr>
+<td style="text-align: center"><img src="/figures/seattle-month.png" alt="Seattle" width="100"></td>
+<td style="text-align: center"><img src="/figures/singapore-month.png" alt="Singapore" width="100"></td>
+<td style="text-align: center"><img src="/figures/barcelona-month.png" alt="Barcelona" width="100"></td>
+<td style="text-align: center"><img src="/figures/tokyo-month.png" alt="Tokyo" width="100"></td>
+</tr>
+<tr>
+<td style="text-align: center">Seattle, USA</td>
+<td style="text-align: center">Singapore</td>
+<td style="text-align: center">Barcelona, Span</td>
+<td style="text-align: center">Tokyo, Japan</td>
 </tr>
 </table>
 
@@ -67,25 +91,28 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 <td style="text-align: center"><img src="/figures/figure2-2-4.jpg" alt="satellite image" width="75"></td>
 </tr>
 <tr>
-<td style="text-align: center" colspan="2">Water area</td>
+<td style="text-align: center" colspan="2">Water scene</td>
 <td style="text-align: center" colspan="2">Occlusion</td>
 </tr>
-<tr>
-<td style="text-align: center"><img src="/figures/figure9-2-1.jpg" alt="ground image" width="150"></td>
-<td style="text-align: center"><img src="/figures/figure9-2-2.jpg" alt="satellite image" width="75"></td>
-<td style="text-align: center" rowspan="2" colspan="2">Other scenes...</td>
-</tr>
-<tr>
-<td style="text-align: center" colspan="2">Season Change</td>
-</tr>
+
+[//]: # (<tr>)
+[//]: # (<td style="text-align: center"><img src="/figures/figure9-2-1.jpg" alt="ground image" width="150"></td>)
+[//]: # (<td style="text-align: center"><img src="/figures/figure9-2-2.jpg" alt="satellite image" width="75"></td>)
+[//]: # (<td style="text-align: center" rowspan="2" colspan="2">Other scenes...</td>)
+[//]: # (</tr>)
+[//]: # (<tr>)
+[//]: # (<td style="text-align: center" colspan="2">Season Change</td>)
+[//]: # (</tr>)
+
 </table>
 
 
-### Yearly and monthly distribution 📊
+### Scenes, yearly and monthly distribution 📊
 <table>
 <tr>
 <td style="text-align: center"><img src="/figures/figure3a.png" alt="Yearly distribution" width="200"></td>
-<td style="text-align: center"><img src="/figures/figure3b.png" alt="monthly distribution" width="200"></td>
+<td style="text-align: center"><img src="/figures/figure3b.png" alt="Yearly distribution" width="200"></td>
+<td style="text-align: center"><img src="/figures/figure3c.png" alt="monthly distribution" width="200"></td>
 </tr>
 </table>
 
