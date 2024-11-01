@@ -27,7 +27,7 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 <td style="text-align: center"><img src="/figures/london-month.png" alt="London" width="100"></td>
 <td style="text-align: center"><img src="/figures/melbourne-month.png" alt="Melbourne" width="100"></td>
 <td style="text-align: center"><img src="/figures/mexico-month.png" alt="mexico" width="100"></td>
-<td rowspan="8"><img src="/figures/monthly-scalebar.png" alt="scalebar" width="40"> <br>Scalebar</td>
+<td rowspan="8"><img src="/figures/monthly-scalebar.png" alt="Colorbar" width="40"> <br>Colorbar</td>
 </tr>
 <tr>
 <td style="text-align: center">Capetown, South Africa</td>
@@ -146,7 +146,7 @@ To download this dataset, you can click: [🤗CV-Cities](https://huggingface.co/
 </table>
 
 ## Model Zoo 📦
-_🚧 Under Construction 🛠️_
+_🚧 Under Construction_
 
 ### Train the CVCities 🚂
 ```python
@@ -160,5 +160,5 @@ This code is based on the amazing work of:
  - [QGIS](https://github.com/qgis/QGIS)
 
 ## Citation ✅
-_🚧 Under Construction 🛠_
+_🚧 Under Construction_
 
