@@ -3,7 +3,7 @@
 # 🌏🚶‍♂️🔍CV-Cities: Advancing Cross-View Geo-Localization in Global Cities
 
 [//]: # (Paper: Under review  )
-ArXiv: _🚧 coming soon..._
+[JSTARS Paper](https://doi.org/10.1109/JSTARS.2024.3502160), [ArXiv](https://arxiv.org/abs/2411.12431)
     
 </div>
 
