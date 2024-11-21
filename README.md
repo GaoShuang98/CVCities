@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<div align="center">
 
 # 🌏🚶‍♂️🔍CV-Cities: Advancing Cross-View Geo-Localization in Global Cities
 
