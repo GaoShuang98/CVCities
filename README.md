@@ -159,6 +159,17 @@ This code is based on the amazing work of:
  - [Sample4Geo](https://github.com/Skyy93/Sample4Geo)
  - [QGIS](https://github.com/qgis/QGIS)
 
-## Citation ✅
-_🚧 Under Construction_
+## Citation (EARLY ACCESS) ✅
+```
+@article{huangCVCities2024,
+  author={Huang, Gaoshuang and Zhou, Yang and Zhao, Luying and Gan, Wenjian},
+  journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}, 
+  title={CV-Cities: Advancing Cross-View Geo-Localization in Global Cities}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-15},
+  keywords={Cross-view geo-localization;dataset;global cities;image retrieval;visual place recognition},
+  doi={10.1109/JSTARS.2024.3502160}}
+```
 
