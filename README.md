@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🌏🚶‍♂️🔍CV-Cities: Advancing Cross-View Geo-Localization in Global Cities
-
+[![Official Repo](http://img.shields.io/badge/official_repo-CVCities-007ACC.svg)](https://github.com/GaoShuang98/CVCities)
 [![Paper](http://img.shields.io/badge/paper-IEEE_JSTARS-B31B1B.svg)](https://doi.org/10.1109/JSTARS.2024.3502160)
 [![Paper](http://img.shields.io/badge/paper-arXiv.2411.12431-B31B1B.svg)](https://arxiv.org/abs/2411.12431)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/cv-cities-advancing-cross-view-geo/visual-place-recognition-on-cv-cities)](https://paperswithcode.com/sota/visual-place-recognition-on-cv-cities?p=cv-cities-advancing-cross-view-geo)
