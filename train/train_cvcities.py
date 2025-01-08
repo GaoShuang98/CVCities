@@ -25,8 +25,8 @@ class Configuration:
     
     # Model
     # model: str = 'convnext_base.fb_in22k_ft_in1k_384'
-    model = 'convnext_base_384_in22ft1k'
-    # model = 'dinov2_vitb14_MixVPR'
+    # model = 'convnext_base_384_in22ft1k'
+    model = 'dinov2_vitb14_MixVPR'
 
     # backbone
     backbone_arch = 'dinov2_vitb14'
