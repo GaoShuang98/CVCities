@@ -21,21 +21,20 @@ from cvcities_base.model import TimmModel
 @dataclass
 class Configuration:
     # Model
-
-    model = 'dinov2_vitb14_MixVPR'
+    model = 'dinov2_vits14_MixVPR'
 
     # backbone
-    backbone_arch = 'dinov2_vitb14'
+    backbone_arch = 'dinov2_vits14'
     pretrained = True
     # layers_to_freeze = 1
     # layers_to_crop = []
-    layer1 = 7
+    layer1 = 1
     use_cls = True
     norm_descs = True
 
     # Aggregator 聚合方法
-    agg_arch = 'MixVPR'  # CosPlace, NetVLAD, GeM
-    agg_config = {'in_channels': 768,
+    agg_arch = 'MixVPR'
+    agg_config = {'in_channels': 384,
                   'in_h': 32,  # 受输入图像尺寸的影响
                   'in_w': 32,
                   'out_channels': 1024,
@@ -52,7 +51,7 @@ class Configuration:
     custom_sampling: bool = True  # use custom sampling instead of random
     seed = 1
     epochs: int = 40
-    batch_size: int = 16  # keep in mind real_batch_size = 2 * batch_size
+    batch_size: int = 32  # keep in mind real_batch_size = 2 * batch_size
     verbose: bool = True
     gpu_ids: tuple = (0, 1)  # GPU ids for training
 
@@ -67,12 +66,11 @@ class Configuration:
     decay_exclue_bias: bool = False
     grad_checkpointing: bool = False  # Gradient Checkpointing
     use_sgd = True
-
     # Loss
     label_smoothing: float = 0.1
 
     # Learning Rate
-    lr: float = 0.005  # 1 * 10^-4 for ViT | 1 * 10^-1 for CNN
+    lr: float = 0.001  # 1 * 10^-4 for ViT | 1 * 10^-1 for CNN
     scheduler: str = "cosine"  # "polynomial" | "cosine" | "constant" | None
     warmup_epochs: int = 0.1
     lr_end: float = 0.0001  # only for "polynomial"
@@ -94,7 +92,7 @@ class Configuration:
     checkpoint_start = None
 
     # set num_workers to 0 if on Windows
-    num_workers: int = 0 if os.name == 'nt' else 7
+    num_workers: int = 4
 
     # train on GPU if available
     device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -164,7 +162,7 @@ if __name__ == '__main__':
     if config.grad_checkpointing:
         model.set_grad_checkpointing(True)
 
-    # Load pretrained Checkpoint
+    # Load pretrained Checkpoint    
     if config.checkpoint_start is not None:
         print("Start from:", config.checkpoint_start)
         model_state_dict = torch.load(config.checkpoint_start)
@@ -175,7 +173,7 @@ if __name__ == '__main__':
     if torch.cuda.device_count() > 1 and len(config.gpu_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=config.gpu_ids)
 
-    # Model to device
+    # Model to device   
     model = model.to(config.device)
 
     print("\nImage Size Query:", img_size)

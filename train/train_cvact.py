@@ -27,7 +27,6 @@ class Configuration:
 
     # backbone
     backbone_arch = 'dinov2_vitb14'
-    # backbone_arch = ''
     pretrained = True
 
     layer1 = 2
@@ -35,7 +34,7 @@ class Configuration:
     norm_descs = True
 
     # Aggregator 聚合方法
-    agg_arch = 'MixVPR'  # CosPlace, NetVLAD, GeM
+    agg_arch = 'MixVPR'
     agg_config = {'in_channels': 768,
                     'in_h': 32,
                     'in_w': 32,
@@ -170,7 +169,7 @@ if __name__ == '__main__':
     if config.grad_checkpointing:
         model.set_grad_checkpointing(True)
 
-    # Load pretrained Checkpoint    
+    # Load pretrained Checkpoint
     if config.checkpoint_start is not None:
         print("Start from:", config.checkpoint_start)
         model_state_dict = torch.load(config.checkpoint_start)
@@ -181,7 +180,7 @@ if __name__ == '__main__':
     if torch.cuda.device_count() > 1 and len(config.gpu_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=config.gpu_ids)
 
-    # Model to device   
+    # Model to device
     model = model.to(config.device)
 
     print("\nImage Size Sat:", image_size_sat)
@@ -443,6 +442,7 @@ if __name__ == '__main__':
             if r1_test > best_score:
 
                 best_score = r1_test
+
                 if torch.cuda.device_count() > 1 and len(config.gpu_ids) > 1:
                     torch.save(model.module.state_dict(),
                                '{}/weights_e{}_{:.4f}.pth'.format(model_path, epoch, r1_test))
@@ -499,6 +499,5 @@ if __name__ == '__main__':
                        step_size=1000,
                        cleanup=True)
 
-    # print(f'r1_test_last:{r1_test}')
 
 

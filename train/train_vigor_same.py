@@ -11,11 +11,11 @@ from torch.utils.data import DataLoader
 from transformers import get_constant_schedule_with_warmup, get_polynomial_decay_schedule_with_warmup, \
     get_cosine_schedule_with_warmup
 
-from cvcities_base.dataset.cvusa import CVUSADatasetEval, CVUSADatasetTrain
+from cvcities_base.dataset.vigor_origin_data_form import VigorDatasetEval, VigorDatasetTrain
 from cvcities_base.transforms import get_transforms_train, get_transforms_val
 from cvcities_base.utils import setup_system, Logger
 from cvcities_base.trainer import train
-from cvcities_base.evaluate.cvusa_and_cvact import evaluate, calc_sim
+from cvcities_base.evaluate.vigor import evaluate, calc_sim
 from cvcities_base.loss import InfoNCE
 from cvcities_base.model import TimmModel
 
@@ -28,16 +28,14 @@ class Configuration:
     # backbone
     backbone_arch = 'dinov2_vitb14'
     pretrained = False
-    layers_to_freeze = 1
-    layers_to_crop = []
-    layer1 = -1
+    layer1 = 2
     use_cls = True
     norm_descs = True
 
     # Aggregator 聚合方法
     agg_arch = 'MixVPR'
     agg_config = {'in_channels': 768,
-                  'in_h': 32,
+                  'in_h': 32,  # 受输入图像尺寸的影响
                   'in_w': 32,
                   'out_channels': 1024,
                   'mix_depth': 2,
@@ -52,8 +50,8 @@ class Configuration:
     # Training
     mixed_precision: bool = True
     seed = 1
-    epochs: int = 40
-    batch_size: int = 10  # keep in mind real_batch_size = 2 * batch_size
+    epochs: int = 50
+    batch_size: int = 16  # keep in mind real_batch_size = 2 * batch_size
     verbose: bool = True
     gpu_ids: tuple = (0, 1)  # GPU ids for training
 
@@ -63,10 +61,10 @@ class Configuration:
     sim_sample: bool = True  # use similarity sampling
     neighbour_select: int = 64  # max selection size from pool
     neighbour_range: int = 128  # pool size for selection
-    gps_dict_path: str = "D:/Datasets/CVUSA/gps_dict.pkl"  # path to pre-computed distances
+    gps_dict_path: str = "D:/Datasets/VIGOR/gps_dict_same.pkl"  # gps_dict_cross.pkl | gps_dict_same.pkl
 
     # Eval
-    batch_size_eval: int = 128
+    batch_size_eval: int = 100
     eval_every_n_epoch: int = 1  # eval every n Epoch
     normalize_features: bool = True
 
@@ -80,29 +78,31 @@ class Configuration:
     label_smoothing: float = 0.1
 
     # Learning Rate
-    lr: float = 0.005  # 1 * 10^-4 for ViT | 1 * 10^-3 for CNN   0.0002 for adam, 0.05 for sgd (needs to change according to batch size)
+    lr: float = 0.001  # 1 * 10^-4 for ViT | 1 * 10^-1 for CNN
     scheduler: str = "cosine"  # "polynomial" | "cosine" | "constant" | None
     warmup_epochs: int = 1
     lr_end: float = 0.0001  # only for "polynomial"
 
     # Dataset
-    data_folder = "D:/Datasets/CVUSA"
+    data_folder = "D:/Datasets/VIGOR"
+    same_area: bool = True  # True: same | False: cross
+    ground_cutting = 0  # cut ground upper and lower
 
     # Augment Images
     prob_rotate: float = 0.75  # rotates the sat image and ground images simultaneously
     prob_flip: float = 0.5  # flipping the sat image and ground images simultaneously
 
     # Savepath for model checkpoints
-    model_path: str = "./cvusa"
+    model_path: str = "./vigor_same"
 
     # Eval before training
     zero_shot: bool = False
 
     # Checkpoint to start from
-    checkpoint_start = None
+    checkpoint_start = r'D:\python_code\Sample4Geo-main\Sample4Geo-main\vigor_same\dinov2_vitb14_MixVPR\2024-05-22_151224\weights_e38_75.6031.pth'
 
     # set num_workers to 0 if on Windows
-    num_workers: int = 0 if os.name == 'nt' else 7
+    num_workers: int = 4
 
     # train on GPU if available
     device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -124,7 +124,7 @@ if __name__ == '__main__':
 
     model_path = "{}/{}/{}".format(config.model_path,
                                    config.model,
-                                   time.strftime("%H%M%S"))
+                                   time.strftime("%Y-%m-%d_%H%M%S"))
 
     if not os.path.exists(model_path):
         os.makedirs(model_path)
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     # Model                                                                       #
     # -----------------------------------------------------------------------------#
 
-    print("\nModel: {}".format(config.model))
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
 
     model = TimmModel(model_name=config.model,
                       pretrained=True,
@@ -157,17 +157,17 @@ if __name__ == '__main__':
 
     image_size_sat = (img_size, img_size)
 
-    # new_width = config.img_size * 2
-    # new_hight = round((224 / 1232) * new_width)
-    new_width = config.new_width
-    new_hight = config.new_hight
+    # new_width = img_size * 2
+    new_width = img_size
+    # new_hight = int(((1024 - 2 * config.ground_cutting) / 2048) * new_width)
+    new_hight = img_size
     img_size_ground = (new_hight, new_width)
 
     # Activate gradient checkpointing
     if config.grad_checkpointing:
         model.set_grad_checkpointing(True)
 
-    # Load pretrained Checkpoint
+    # Load pretrained Checkpoint    
     if config.checkpoint_start is not None:
         print("Start from:", config.checkpoint_start)
         model_state_dict = torch.load(config.checkpoint_start)
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     if torch.cuda.device_count() > 1 and len(config.gpu_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=config.gpu_ids)
 
-    # Model to device
+    # Model to device   
     model = model.to(config.device)
 
     print("\nImage Size Sat:", image_size_sat)
@@ -195,10 +195,11 @@ if __name__ == '__main__':
                                                                          img_size_ground,
                                                                          mean=mean,
                                                                          std=std,
-                                                                         )
+                                                                         ground_cutting=config.ground_cutting)
 
     # Train
-    train_dataset = CVUSADatasetTrain(data_folder=config.data_folder,
+    train_dataset = VigorDatasetTrain(data_folder=config.data_folder,
+                                      same_area=config.same_area,
                                       transforms_query=ground_transforms_train,
                                       transforms_reference=sat_transforms_train,
                                       prob_flip=config.prob_flip,
@@ -217,12 +218,13 @@ if __name__ == '__main__':
                                                                    img_size_ground,
                                                                    mean=mean,
                                                                    std=std,
-                                                                   )
+                                                                   ground_cutting=config.ground_cutting)
 
-    # Reference Satellite Images
-    reference_dataset_test = CVUSADatasetEval(data_folder=config.data_folder,
+    # Reference Satellite Images Test
+    reference_dataset_test = VigorDatasetEval(data_folder=config.data_folder,
                                               split="test",
                                               img_type="reference",
+                                              same_area=config.same_area,
                                               transforms=sat_transforms_val,
                                               )
 
@@ -233,9 +235,10 @@ if __name__ == '__main__':
                                            pin_memory=True)
 
     # Query Ground Images Test
-    query_dataset_test = CVUSADatasetEval(data_folder=config.data_folder,
+    query_dataset_test = VigorDatasetEval(data_folder=config.data_folder,
                                           split="test",
                                           img_type="query",
+                                          same_area=config.same_area,
                                           transforms=ground_transforms_val,
                                           )
 
@@ -245,8 +248,8 @@ if __name__ == '__main__':
                                        shuffle=False,
                                        pin_memory=True)
 
-    print("Reference Images Test:", len(reference_dataset_test))
     print("Query Images Test:", len(query_dataset_test))
+    print("Reference Images Test:", len(reference_dataset_test))
 
     # -----------------------------------------------------------------------------#
     # GPS Sample                                                                  #
@@ -258,14 +261,15 @@ if __name__ == '__main__':
         sim_dict = None
 
     # -----------------------------------------------------------------------------#
-    # Sim Sample                                                                  #
+    # Sim Sample + Eval on Train                                                  #
     # -----------------------------------------------------------------------------#
 
     if config.sim_sample:
         # Query Ground Images Train for simsampling
-        query_dataset_train = CVUSADatasetEval(data_folder=config.data_folder,
+        query_dataset_train = VigorDatasetEval(data_folder=config.data_folder,
                                                split="train",
                                                img_type="query",
+                                               same_area=config.same_area,
                                                transforms=ground_transforms_val,
                                                )
 
@@ -275,9 +279,11 @@ if __name__ == '__main__':
                                             shuffle=False,
                                             pin_memory=True)
 
-        reference_dataset_train = CVUSADatasetEval(data_folder=config.data_folder,
+        # Reference Satellite Images Train for simsampling
+        reference_dataset_train = VigorDatasetEval(data_folder=config.data_folder,
                                                    split="train",
                                                    img_type="reference",
+                                                   same_area=config.same_area,
                                                    transforms=sat_transforms_val,
                                                    )
 
@@ -287,10 +293,10 @@ if __name__ == '__main__':
                                                 shuffle=False,
                                                 pin_memory=True)
 
-        print("\nReference Images Train:", len(reference_dataset_train))
-        print("Query Images Train:", len(query_dataset_train))
+        print("\nQuery Images Train:", len(query_dataset_train))
+        print("Reference Images Train (unique):", len(reference_dataset_train))
 
-        # -----------------------------------------------------------------------------#
+    # -----------------------------------------------------------------------------#
     # Loss                                                                        #
     # -----------------------------------------------------------------------------#
 
@@ -399,7 +405,7 @@ if __name__ == '__main__':
 
     for epoch in range(1, config.epochs + 1):
 
-        print("\n{}[Epoch: {}]{}".format(30 * "-", epoch, 30 * "-"))
+        print("\n{}[{}/Epoch: {}]{}".format(30*"-",time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),  epoch, 30*"-"))
 
         train_loss = train(config,
                            model,
@@ -434,7 +440,6 @@ if __name__ == '__main__':
                                               ranks=[1, 5, 10],
                                               step_size=1000,
                                               cleanup=True)
-
             if r1_test > best_score:
 
                 best_score = r1_test
@@ -453,4 +458,4 @@ if __name__ == '__main__':
     if torch.cuda.device_count() > 1 and len(config.gpu_ids) > 1:
         torch.save(model.module.state_dict(), '{}/weights_end.pth'.format(model_path))
     else:
-        torch.save(model.state_dict(), '{}/weights_end.pth'.format(model_path))            
+        torch.save(model.state_dict(), '{}/weights_end.pth'.format(model_path))

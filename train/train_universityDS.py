@@ -4,18 +4,16 @@ import math
 import shutil
 import sys
 import torch
-import pickle
 from dataclasses import dataclass
 from torch.cuda.amp import GradScaler
 from torch.utils.data import DataLoader
 from transformers import get_constant_schedule_with_warmup, get_polynomial_decay_schedule_with_warmup, \
     get_cosine_schedule_with_warmup
 
-from cvcities_base.dataset.vigor_origin_data_form import VigorDatasetEval, VigorDatasetTrain
-from cvcities_base.transforms import get_transforms_train, get_transforms_val
+from cvcities_base.dataset.university import U1652DatasetEval, U1652DatasetTrain, get_transforms
 from cvcities_base.utils import setup_system, Logger
 from cvcities_base.trainer import train
-from cvcities_base.evaluate.vigor import evaluate, calc_sim
+from cvcities_base.evaluate.university import evaluate
 from cvcities_base.loss import InfoNCE
 from cvcities_base.model import TimmModel
 
@@ -23,52 +21,45 @@ from cvcities_base.model import TimmModel
 @dataclass
 class Configuration:
     # Model
-    model = 'dinov2_vits14_MixVPR'
+    model = 'dinov2_vitb14_MixVPR'
 
     # backbone
-    backbone_arch = 'dinov2_vits14'
+    backbone_arch = 'dinov2_vitb14'
     pretrained = True
-    layer1 = 2
+    layer1 = 7
     use_cls = True
     norm_descs = True
 
     # Aggregator 聚合方法
-    agg_arch = 'MixVPR'  # CosPlace, NetVLAD, GeM
-    agg_config = {'in_channels': 384,
-                  'in_h': 32,  # 受输入响
+    agg_arch = 'MixVPR'
+    agg_config = {'in_channels': 768,
+                  'in_h': 32,  # 受输入图像尺寸的影响
                   'in_w': 32,
                   'out_channels': 1024,
                   'mix_depth': 2,
                   'mlp_ratio': 1,
                   'out_rows': 4}
-
     # Override model image size
     img_size: int = 448
     new_hight = 448
     new_width = 448
 
-    # Training 
+    # Training
     mixed_precision: bool = True
+    custom_sampling: bool = True  # use custom sampling instead of random
     seed = 1
-    epochs: int = 50
-    batch_size: int = 20  # keep in mind real_batch_size = 2 * batch_size
+    epochs: int = 40
+    batch_size: int = 16  # keep in mind real_batch_size = 2 * batch_size
     verbose: bool = True
     gpu_ids: tuple = (0, 1)  # GPU ids for training
-
-    # Similarity Sampling
-    custom_sampling: bool = True  # use custom sampling instead of random
-    gps_sample: bool = True  # use gps sampling
-    sim_sample: bool = True  # use similarity sampling
-    neighbour_select: int = 64  # max selection size from pool
-    neighbour_range: int = 128  # pool size for selection
-    gps_dict_path: str = "D:/Datasets/VIGOR/gps_dict_same.pkl"  # gps_dict_cross.pkl | gps_dict_same.pkl
 
     # Eval
     batch_size_eval: int = 100
     eval_every_n_epoch: int = 1  # eval every n Epoch
     normalize_features: bool = True
+    eval_gallery_n: int = -1  # -1 for all or int
 
-    # Optimizer 
+    # Optimizer
     clip_grad = 100.  # None | float
     decay_exclue_bias: bool = False
     grad_checkpointing: bool = False  # Gradient Checkpointing
@@ -78,22 +69,20 @@ class Configuration:
     label_smoothing: float = 0.1
 
     # Learning Rate
-    lr: float = 0.002  # 1 * 10^-4 for ViT | 1 * 10^-1 for CNN
+    lr: float = 0.005  # 1 * 10^-4 for ViT | 1 * 10^-1 for CNN
     scheduler: str = "cosine"  # "polynomial" | "cosine" | "constant" | None
-    warmup_epochs: int = 1
+    warmup_epochs: int = 0.1
     lr_end: float = 0.0001  # only for "polynomial"
 
     # Dataset
-    data_folder = "D:/Datasets/VIGOR"
-    same_area: bool = True  # True: same | False: cross
-    ground_cutting = 0  # cut ground upper and lower
+    dataset: str = 'U1652-S2D'  # 'U1652-D2S' | 'U1652-S2D'
+    data_folder: str = "D:/Datasets/U1652"
 
     # Augment Images
-    prob_rotate: float = 0.75  # rotates the sat image and ground images simultaneously
-    prob_flip: float = 0.5  # flipping the sat image and ground images simultaneously
+    prob_flip: float = 0.5  # flipping the sat image and drone image simultaneously
 
     # Savepath for model checkpoints
-    model_path: str = "./vigor_same"
+    model_path: str = "./university"
 
     # Eval before training
     zero_shot: bool = False
@@ -102,7 +91,7 @@ class Configuration:
     checkpoint_start = None
 
     # set num_workers to 0 if on Windows
-    num_workers: int = 6
+    num_workers: int = 0 if os.name == 'nt' else 7
 
     # train on GPU if available
     device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -119,6 +108,17 @@ class Configuration:
 # -----------------------------------------------------------------------------#
 
 config = Configuration()
+
+if config.dataset == 'U1652-D2S':
+    config.query_folder_train = 'D:/Datasets/U1652/train/satellite'
+    config.gallery_folder_train = 'D:/Datasets/U1652/train/drone'
+    config.query_folder_test = 'D:/Datasets/U1652/test/query_drone'
+    config.gallery_folder_test = 'D:/Datasets/U1652/test/gallery_satellite'
+elif config.dataset == 'U1652-S2D':
+    config.query_folder_train = 'D:/Datasets/U1652/train/satellite'
+    config.gallery_folder_train = 'D:/Datasets/U1652/train/drone'
+    config.query_folder_test = 'D:/Datasets/U1652/test/query_satellite'
+    config.gallery_folder_test = 'D:/Datasets/U1652/test/gallery_drone'
 
 if __name__ == '__main__':
 
@@ -140,8 +140,9 @@ if __name__ == '__main__':
     # -----------------------------------------------------------------------------#
     # Model                                                                       #
     # -----------------------------------------------------------------------------#
-
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
+
+    print("\nModel: {}".format(config.model))
 
     model = TimmModel(model_name=config.model,
                       pretrained=True,
@@ -153,15 +154,8 @@ if __name__ == '__main__':
     print(data_config)
     mean = data_config["mean"]
     std = data_config["std"]
-    img_size = config.img_size
 
-    image_size_sat = (img_size, img_size)
-
-    # new_width = img_size * 2
-    new_width = img_size
-    # new_hight = int(((1024 - 2 * config.ground_cutting) / 2048) * new_width)
-    new_hight = img_size
-    img_size_ground = (new_hight, new_width)
+    img_size = (config.img_size, config.img_size)
 
     # Activate gradient checkpointing
     if config.grad_checkpointing:
@@ -181,8 +175,8 @@ if __name__ == '__main__':
     # Model to device   
     model = model.to(config.device)
 
-    print("\nImage Size Sat:", image_size_sat)
-    print("Image Size Ground:", img_size_ground)
+    print("\nImage Size Query:", img_size)
+    print("Image Size Ground:", img_size)
     print("Mean: {}".format(mean))
     print("Std:  {}\n".format(std))
 
@@ -191,20 +185,15 @@ if __name__ == '__main__':
     # -----------------------------------------------------------------------------#
 
     # Transforms
-    sat_transforms_train, ground_transforms_train = get_transforms_train(image_size_sat,
-                                                                         img_size_ground,
-                                                                         mean=mean,
-                                                                         std=std,
-                                                                         ground_cutting=config.ground_cutting)
+    val_transforms, train_sat_transforms, train_drone_transforms = get_transforms(img_size, mean=mean, std=std)
 
     # Train
-    train_dataset = VigorDatasetTrain(data_folder=config.data_folder,
-                                      same_area=config.same_area,
-                                      transforms_query=ground_transforms_train,
-                                      transforms_reference=sat_transforms_train,
+    train_dataset = U1652DatasetTrain(query_folder=config.query_folder_train,
+                                      gallery_folder=config.gallery_folder_train,
+                                      transforms_query=train_sat_transforms,
+                                      transforms_gallery=train_drone_transforms,
                                       prob_flip=config.prob_flip,
-                                      prob_rotate=config.prob_rotate,
-                                      shuffle_batch_size=config.batch_size
+                                      shuffle_batch_size=config.batch_size,
                                       )
 
     train_dataloader = DataLoader(train_dataset,
@@ -213,33 +202,10 @@ if __name__ == '__main__':
                                   shuffle=not config.custom_sampling,
                                   pin_memory=True)
 
-    # Eval
-    sat_transforms_val, ground_transforms_val = get_transforms_val(image_size_sat,
-                                                                   img_size_ground,
-                                                                   mean=mean,
-                                                                   std=std,
-                                                                   ground_cutting=config.ground_cutting)
-
-    # Reference Satellite Images Test
-    reference_dataset_test = VigorDatasetEval(data_folder=config.data_folder,
-                                              split="test",
-                                              img_type="reference",
-                                              same_area=config.same_area,
-                                              transforms=sat_transforms_val,
-                                              )
-
-    reference_dataloader_test = DataLoader(reference_dataset_test,
-                                           batch_size=config.batch_size_eval,
-                                           num_workers=config.num_workers,
-                                           shuffle=False,
-                                           pin_memory=True)
-
-    # Query Ground Images Test
-    query_dataset_test = VigorDatasetEval(data_folder=config.data_folder,
-                                          split="test",
-                                          img_type="query",
-                                          same_area=config.same_area,
-                                          transforms=ground_transforms_val,
+    # Reference Satellite Images
+    query_dataset_test = U1652DatasetEval(data_folder=config.query_folder_test,
+                                          mode="query",
+                                          transforms=val_transforms,
                                           )
 
     query_dataloader_test = DataLoader(query_dataset_test,
@@ -248,53 +214,22 @@ if __name__ == '__main__':
                                        shuffle=False,
                                        pin_memory=True)
 
+    # Query Ground Images Test
+    gallery_dataset_test = U1652DatasetEval(data_folder=config.gallery_folder_test,
+                                            mode="gallery",
+                                            transforms=val_transforms,
+                                            sample_ids=query_dataset_test.get_sample_ids(),
+                                            gallery_n=config.eval_gallery_n,
+                                            )
+
+    gallery_dataloader_test = DataLoader(gallery_dataset_test,
+                                         batch_size=config.batch_size_eval,
+                                         num_workers=config.num_workers,
+                                         shuffle=False,
+                                         pin_memory=True)
+
     print("Query Images Test:", len(query_dataset_test))
-    print("Reference Images Test:", len(reference_dataset_test))
-
-    # -----------------------------------------------------------------------------#
-    # GPS Sample                                                                  #
-    # -----------------------------------------------------------------------------#
-    if config.gps_sample:
-        with open(config.gps_dict_path, "rb") as f:
-            sim_dict = pickle.load(f)
-    else:
-        sim_dict = None
-
-    # -----------------------------------------------------------------------------#
-    # Sim Sample + Eval on Train                                                  #
-    # -----------------------------------------------------------------------------#
-
-    if config.sim_sample:
-        # Query Ground Images Train for simsampling
-        query_dataset_train = VigorDatasetEval(data_folder=config.data_folder,
-                                               split="train",
-                                               img_type="query",
-                                               same_area=config.same_area,
-                                               transforms=ground_transforms_val,
-                                               )
-
-        query_dataloader_train = DataLoader(query_dataset_train,
-                                            batch_size=config.batch_size_eval,
-                                            num_workers=config.num_workers,
-                                            shuffle=False,
-                                            pin_memory=True)
-
-        # Reference Satellite Images Train for simsampling
-        reference_dataset_train = VigorDatasetEval(data_folder=config.data_folder,
-                                                   split="train",
-                                                   img_type="reference",
-                                                   same_area=config.same_area,
-                                                   transforms=sat_transforms_val,
-                                                   )
-
-        reference_dataloader_train = DataLoader(reference_dataset_train,
-                                                batch_size=config.batch_size_eval,
-                                                num_workers=config.num_workers,
-                                                shuffle=False,
-                                                pin_memory=True)
-
-        print("\nQuery Images Train:", len(query_dataset_train))
-        print("Reference Images Train (unique):", len(reference_dataset_train))
+    print("Gallery Images Test:", len(gallery_dataset_test))
 
     # -----------------------------------------------------------------------------#
     # Loss                                                                        #
@@ -374,28 +309,17 @@ if __name__ == '__main__':
 
         r1_test = evaluate(config=config,
                            model=model,
-                           reference_dataloader=reference_dataloader_test,
-                           query_dataloader=query_dataloader_test,
+                           query_loader=query_dataloader_test,
+                           gallery_loader=gallery_dataloader_test,
                            ranks=[1, 5, 10],
                            step_size=1000,
                            cleanup=True)
-
-        if config.sim_sample:
-            r1_train, sim_dict = calc_sim(config=config,
-                                          model=model,
-                                          reference_dataloader=reference_dataloader_train,
-                                          query_dataloader=query_dataloader_train,
-                                          ranks=[1, 5, 10],
-                                          step_size=1000,
-                                          cleanup=True)
 
     # -----------------------------------------------------------------------------#
     # Shuffle                                                                     #
     # -----------------------------------------------------------------------------#
     if config.custom_sampling:
-        train_dataloader.dataset.shuffle(sim_dict,
-                                         neighbour_select=config.neighbour_select,
-                                         neighbour_range=config.neighbour_range)
+        train_dataloader.dataset.shuffle()
 
     # -----------------------------------------------------------------------------#
     # Train                                                                       #
@@ -426,20 +350,12 @@ if __name__ == '__main__':
 
             r1_test = evaluate(config=config,
                                model=model,
-                               reference_dataloader=reference_dataloader_test,
-                               query_dataloader=query_dataloader_test,
+                               query_loader=query_dataloader_test,
+                               gallery_loader=gallery_dataloader_test,
                                ranks=[1, 5, 10],
                                step_size=1000,
                                cleanup=True)
 
-            if config.sim_sample:
-                r1_train, sim_dict = calc_sim(config=config,
-                                              model=model,
-                                              reference_dataloader=reference_dataloader_train,
-                                              query_dataloader=query_dataloader_train,
-                                              ranks=[1, 5, 10],
-                                              step_size=1000,
-                                              cleanup=True)
             if r1_test > best_score:
 
                 best_score = r1_test
@@ -451,9 +367,7 @@ if __name__ == '__main__':
                     torch.save(model.state_dict(), '{}/weights_e{}_{:.4f}.pth'.format(model_path, epoch, r1_test))
 
         if config.custom_sampling:
-            train_dataloader.dataset.shuffle(sim_dict,
-                                             neighbour_select=config.neighbour_select,
-                                             neighbour_range=config.neighbour_range)
+            train_dataloader.dataset.shuffle()
 
     if torch.cuda.device_count() > 1 and len(config.gpu_ids) > 1:
         torch.save(model.module.state_dict(), '{}/weights_end.pth'.format(model_path))

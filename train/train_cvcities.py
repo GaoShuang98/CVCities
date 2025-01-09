@@ -24,15 +24,11 @@ from cvcities_base.model import TimmModel
 class Configuration:
     
     # Model
-    # model: str = 'convnext_base.fb_in22k_ft_in1k_384'
-    # model = 'convnext_base_384_in22ft1k'
     model = 'dinov2_vitb14_MixVPR'
 
     # backbone
     backbone_arch = 'dinov2_vitb14'
-
     pretrained = False  # False：patch embed 卷积模块 和 blocks 参数更新，True:patch embed 卷积模块 参数不更新 和 blocks 由layer1定义更新参数层数
-
     layer1 = -2
     use_cls = True
     norm_descs = True
@@ -47,8 +43,6 @@ class Configuration:
                   'mlp_ratio': 1,
                   'out_rows': 4}
     # Override model image size
-    # crop_size_ratio_min = 0.5
-    # crop_size_ratio_max = 1.0
     crop_p = 1
     img_size: int = 448
 
