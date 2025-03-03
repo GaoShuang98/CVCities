@@ -99,7 +99,7 @@ class Configuration:
     zero_shot: bool = False
 
     # Checkpoint to start from
-    checkpoint_start = r'D:\python_code\Sample4Geo-main\Sample4Geo-main\vigor_cross\dinov2_vitb14_MixVPR\2024-05-25_121513\weights_e10_59.4945.pth'
+    checkpoint_start = None
 
     # set num_workers to 0 if on Windows
     num_workers: int = 4
