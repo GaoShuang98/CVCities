@@ -54,8 +54,8 @@ class Configuration:
     gpu_ids: tuple = (0, 1)  # GPU ids for training
 
     # Eval
-    batch_size_eval: int = 100
-    eval_every_n_epoch: int = 1  # eval every n Epoch
+    batch_size_eval: int = 128
+    eval_every_n_epoch: int = 4  # eval every n Epoch
     normalize_features: bool = True
     eval_gallery_n: int = -1  # -1 for all or int
 
@@ -75,7 +75,7 @@ class Configuration:
     lr_end: float = 0.0001  # only for "polynomial"
 
     # Dataset
-    dataset: str = 'U1652-S2D'  # 'U1652-D2S' | 'U1652-S2D'
+    dataset: str = 'U1652-D2S'  # 'U1652-D2S' | 'U1652-S2D'
     data_folder: str = "D:/Datasets/U1652"
 
     # Augment Images
